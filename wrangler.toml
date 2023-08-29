@@ -1,0 +1,7 @@
+name = "eth-rpc-gateway"
+compatibility_date = "2023-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ethereum-rpc-gateway"
+database_id = "<YOUR-D1-DATABASE-ID>"
