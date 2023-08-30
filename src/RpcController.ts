@@ -1,6 +1,7 @@
 // http://man.hubwiz.com/docset/Ethereum.docset/Contents/Resources/Documents/eth_getLogs.html
 // https://ethereum.github.io/execution-apis/api-documentation/
 
+import { JSON_RPC_VERSION } from "./constants"
 import { Log, Storage } from "./types/Storage"
 
 interface RpcGatewayConfig {
@@ -23,7 +24,7 @@ interface PendingRpcObject {
 
 export default class RpcController {
 
-    jsonrpc = "2.0"
+    jsonrpc = JSON_RPC_VERSION
     networkId: number
     rpcUrl: string
     storage: Storage
