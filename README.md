@@ -8,10 +8,11 @@ We are in alpha, not recommended for production use yet.
 
 #### TODO:
 
-- [x] Implement RPC gateway
+- [x] Implement JSON-RPC gateway
 - [x] Implement D1 database
 - [x] Conciliate remote and cached logs
 - [ ] Implement contract sync
+- [ ] Implement authentication
 - [ ] Add logger
 - [ ] Add documentation
 - [ ] Add unit tests
