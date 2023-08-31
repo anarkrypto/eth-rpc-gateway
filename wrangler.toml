@@ -3,5 +3,14 @@ compatibility_date = "2023-01-01"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "ethereum-rpc-gateway"
+database_name = "eth-rpc-gateway"
 database_id = "<YOUR-D1-DATABASE-ID>"
+
+[durable_objects]
+bindings = [
+  { name = "DURABLE_OBJECT", class_name = "DurableRPC" }
+]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["DurableRPC"]
