@@ -25,23 +25,20 @@ app.post('/', async (c) => {
     return c.json(response)
 })
 
-// TODO: Remove
-app.put('/', async (c) => {
+app.post('/contracts', async (c) => {
     const storage = new StorageController(c.env.DB)
 
-    const rpc = new RpcController({
-        networkId: Number(c.env.NETWORK_ID),
-        rpcUrl: c.env.RPC_URL,
-        storage
-    })
+    const data = await c.req.json()
 
-    const reqBody = await c.req.json()
+    if (!data.address) {
+        return c.json({ error: 'Missing contract address' })
+    }
 
-    if (!(reqBody instanceof Array)) {
-        return c.json({ error: 'Invalid request' }, 400)
-    } 
+    if (!data.initialBlock) {
+        return c.json({ error: 'Missing initial block' })
+    }
 
-    const response = await rpc.syncContractLogs(reqBody)
+    const response = await storage.putContract(data.address, data.initialBlock)
 
     return c.json(response)
 })

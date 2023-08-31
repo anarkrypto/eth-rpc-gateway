@@ -21,7 +21,6 @@ export interface GetLogParams {
 export interface ContractStatus {
     address: string,
     initialBlock: number,
-    lastBlock: number,
 }
 
 export declare class Storage {
@@ -31,6 +30,9 @@ export declare class Storage {
     // Insert or update filter logs
     putLogs(logs: Log[]): Promise<any>
 
-    // Get contract cache status
-    getContract(contractAddress: string): Promise<ContractStatus>
+    // Get contract status
+    getContract(address: string): Promise<ContractStatus>
+
+    // Put contract with 
+    putContract(address: string, initialBlock: number): Promise<any>
 }

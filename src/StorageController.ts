@@ -74,6 +74,23 @@ export default class LogsStorageController implements Storage {
         return await this.db.batch(statements);
     }
 
+    async putContract(address: string, initialBlock: number): Promise<any> {
+        const { results } = await this.db.prepare(
+            `INSERT OR REPLACE INTO contracts (
+                address,
+                initial_block
+            ) VALUES (
+                ?,
+                ?
+            )`
+        ).bind(
+            address,
+            initialBlock
+        ).run()
+
+        return results
+    }
+
     async getContract(address: string): Promise<any> {
         const { results } = await this.db.prepare(
             `SELECT * FROM contracts WHERE address = ?`
