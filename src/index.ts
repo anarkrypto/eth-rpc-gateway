@@ -25,6 +25,7 @@ app.post('/', async (c) => {
     return c.json(response)
 })
 
+// TODO: require admin authentication
 app.post('/contracts', async (c) => {
     const storage = new StorageController(c.env.DB)
 
@@ -39,6 +40,15 @@ app.post('/contracts', async (c) => {
     }
 
     const response = await storage.putContract(data.address, data.initialBlock)
+
+    return c.json(response)
+})
+
+// TODO: require admin authentication
+app.get('/contracts', async (c) => {
+    const storage = new StorageController(c.env.DB)
+
+    const response = await storage.getAllContracts()
 
     return c.json(response)
 })

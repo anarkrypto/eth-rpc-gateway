@@ -100,4 +100,12 @@ export default class LogsStorageController implements Storage {
 
         return results
     }
+
+    async getAllContracts(): Promise<any> {
+        const { results } = await this.db.prepare(
+            `SELECT * FROM contracts`
+        ).all()
+
+        return results
+    }
 }
