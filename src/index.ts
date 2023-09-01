@@ -3,7 +3,7 @@ import { Bindings } from './types/Bindings'
 import RpcController from './RpcController'
 import StorageController from './StorageController'
 import { errorHandler } from './middlewares'
-import { ContractStatus } from './types/Storage'
+import { ContractStatus, Log } from './types/Storage'
 
 export class DurableRPC extends RpcController implements DurableObject {
 
@@ -41,7 +41,7 @@ export class DurableRPC extends RpcController implements DurableObject {
             return c.json(result)
         })
 
-        // TODO: require admin authentication
+        // TODO: require admin authentication and validate body
         this.app.post('/contracts', async (c) => {
             const data = await c.req.json()
 
@@ -64,6 +64,35 @@ export class DurableRPC extends RpcController implements DurableObject {
             return c.json(result)
         })
 
+        /*
+            Webhook to sync new events.
+            It will receive an array of blocks with transaction receipts
+            and save logs for matched contract addresses.
+            It's compatible with QuickAlerts (quicknode.com). Payload Type: Matched Receipts
+        */
+        this.app.post('/webhook', async (c) => {
+            const data = await c.req.json()
+
+            // TODO: Add logs validator
+
+            if (!(data instanceof Array)) {
+                return c.json({ error: 'Should be an array' })
+            }
+
+            const contractsStatus = await this.state.storage.get<ContractStatus[]>('contracts') || []
+            const contractAddresses = contractsStatus.map(({ address }) => address)
+
+            const logsToSave = data.flatMap((block: any) => (block.logs as Log[]).filter(log => contractAddresses.includes(log.address.toLowerCase())));
+
+            if (logsToSave.length === 0) {
+                return c.json({ status: 'ok', saved: 0 })
+            }
+
+            await this.storage.putLogs(logsToSave)
+            
+            return c.json({ status: 'ok', saved: logsToSave.length })
+        })
+
     }
 
     fetch(request: Request) {
@@ -82,7 +111,7 @@ app.use('*', async (c) => {
         method: c.req.method,
         headers: c.req.headers,
         body: c.req.body,
-        signal:  c.req.signal,
+        signal: c.req.signal,
         integrity: c.req.integrity,
     })
 })
