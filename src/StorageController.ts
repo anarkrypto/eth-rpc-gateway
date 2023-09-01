@@ -11,14 +11,14 @@ export default class LogsStorageController implements Storage {
 
     async getLogs(params: GetLogParams): Promise<Log[]> {
 
-        const topicsConditions = params.topics.map(topic => `topics LIKE '%${topic}%'`);
+        const topicsConditions = params.topics?.map(topic => `topics LIKE '%${topic}%'`) || [];
         const topicsConditionString = topicsConditions.join(' AND ');
 
         const { results } = await this.db.prepare(
             `SELECT * FROM logs WHERE block_number >= ? AND block_number <= ? AND address = ? ${topicsConditions.length ? `AND ${topicsConditionString}` : ''}`
         ).bind(
-            Number(params.fromBlock),
-            Number(params.toBlock),
+            params.fromBlock ? Number(params.fromBlock) : 0,
+            params.toBlock ? Number(params.toBlock) : 10 ** 100,
             params.address,
         ).all()
 

@@ -93,7 +93,7 @@ export default class RpcController {
                     fromBlock: Number(param.fromBlock),
                     toBlock: Number(param.toBlock),
                     address: param.address,
-                    topics: param.topics || []
+                    topics: param.topics
                 })
 
                 cachedResponse.push({

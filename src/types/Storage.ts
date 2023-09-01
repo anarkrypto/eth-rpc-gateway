@@ -11,10 +11,10 @@ export interface Log {
 }
 
 export interface GetLogParams {
-    fromBlock: number,
-    toBlock: number,
+    fromBlock?: number,
+    toBlock?: number,
     address: string,
-    topics: string[]
+    topics?: string[]
     blockhash?: string
 }
 
