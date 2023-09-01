@@ -19,7 +19,7 @@ export default class LogsStorageController implements Storage {
         ).bind(
             params.fromBlock ? Number(params.fromBlock) : 0,
             params.toBlock ? Number(params.toBlock) : 10 ** 100,
-            params.address,
+            params.address.toLowerCase(),
         ).all()
 
         return results.map((log) => ({
@@ -84,7 +84,7 @@ export default class LogsStorageController implements Storage {
                 ?
             )`
         ).bind(
-            address,
+            address.toLowerCase(),
             initialBlock
         ).run()
 
@@ -95,7 +95,7 @@ export default class LogsStorageController implements Storage {
         const { results } = await this.db.prepare(
             `SELECT * FROM contracts WHERE address = ?`
         ).bind(
-            address
+            address.toLowerCase()
         ).run()
 
         return results
